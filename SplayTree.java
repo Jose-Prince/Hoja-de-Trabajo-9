@@ -1,4 +1,4 @@
-public class SplayTree {
+public class SplayTree implements iTree {
 
     class SplayNode{
         SplayNode left, right, parent;
@@ -21,19 +21,22 @@ public class SplayTree {
     }
 
     private SplayNode root;
-    private int count = 0;
+    private int countN = 0;
 
     public SplayTree(){
         root = null;
     }
 
     public boolean isEmpty(){
-        return root == null;
+        if (root == null)
+            return true;
+        else 
+            return false;
     }
 
     public void clear(){
         root = null;
-        count = 0;
+        countN = 0;
     }
 
     public void insert(String ele){
@@ -46,7 +49,7 @@ public class SplayTree {
             else 
                 p.left = z;
             Splay(z);
-            count++;
+            countN++;
         }
     }
 
@@ -152,11 +155,11 @@ public class SplayTree {
         node.left = null;
         node.right = null;
         node = null;
-        count--;
+        countN--;
     }
 
-    public int countNodes() {
-        return count;
+    public int count() {
+        return countN;
     }
 
     public boolean search(String val) {

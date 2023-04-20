@@ -13,7 +13,7 @@ class Node {
 
 
 // class RedBlackTree implements the operations in Red Black Tree
-public class RedBlackTree {
+public class RedBlackTree implements iTree{
 	private Node root;
 	private Node TNULL;
 
