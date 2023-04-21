@@ -6,6 +6,7 @@ public class DiccionarioMain {
         Scanner teclado = new Scanner(System.in);
         int rpa;
         TreeFactory factory = new TreeFactory();
+        String traduccion = "";
 
         System.out.println("Escoja la implementación de Arbol: \n1:Splay Tree\n2:Red Black Tree\n3:AVLTree");
         try {
@@ -27,9 +28,14 @@ public class DiccionarioMain {
 
             while (lector.hasNextLine()){
                 String sentence = lector.nextLine().toLowerCase();
+                System.out.println("Oración original: " + sentence);
                 String[] palabras = sentence.split(" ");
-                
+                for (String palabra : palabras) {
+                    traduccion = traduccion + treeIngles.get(palabra);
+                }
+                System.out.println("Oración traducida: " + traduccion);
             }
+            lector.close();
         } catch (Exception e) {
             teclado.nextLine();
             System.out.println("An error ocurred");
