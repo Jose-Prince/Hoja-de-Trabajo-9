@@ -188,5 +188,38 @@ public class SplayTree implements iTree {
         }
         return null;
     }
+
+    public String get(String ele){
+        if (search(ele) == true){
+            String[] palabras = getNode(ele).element.split(",");
+            return palabras[1];
+        }
+        else 
+            return "*"+ele+"*";
+    }
     
+    private SplayNode getNode(String ele){
+        SplayNode PrevNode = null;
+        SplayNode z = root;
+        while (z != null){
+            PrevNode = z;
+            String[] words = z.element.split(",");
+            if (ele.compareTo(words[0]) > 0)
+                z = z.right;
+            else if (ele.compareTo(words[0]) < 0)
+                z = z.left;
+            else if (ele.compareTo(words[0]) == 0){
+                Splay(z);
+                return z;
+            }
+        }
+
+        if (PrevNode != null){
+            Splay(PrevNode);
+            return null;
+        }
+        return null;
+    }
 }
+
+

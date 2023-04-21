@@ -130,4 +130,31 @@ public class AVLTree implements iTree{
         }
         return found;
     }
+
+    public String get(String val){
+        return get(root, val);
+    }
+
+    private String get(AVLNode r, String val){
+        boolean found = false;
+        while ((r != null) && !found){
+            String rval = r.data;
+            if (val.compareTo(rval) < 0)
+                r = r.left;
+            else if (val.compareTo(rval) > 0)
+                r = r.right;
+            else {
+                found = true;
+                break;
+            }
+            found = search(r, val);
+        }
+        if (found != false){
+            String[] palabras = r.data.split(",");
+            return palabras[1];
+        }
+
+        else 
+            return "*"+val+"*";
+    }
 }
