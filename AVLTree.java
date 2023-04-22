@@ -1,3 +1,9 @@
+/**
+ * @author José Prince
+ * @date 21/04/2023
+ * Algoritmos y Estructura de Datos
+ * Implementación de AVL Tree
+ */
 class AVLNode {
     AVLNode left, right;
     String data;

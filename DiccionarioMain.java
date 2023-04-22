@@ -1,7 +1,17 @@
+/**
+ * @author José Prince
+ * @date 21/04/2023
+ * Algoritmos y Estructura de Datos
+ * Clase principal
+ */
 import java.io.File;
 import java.util.Scanner;
 
 public class DiccionarioMain {
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
         int rpa;

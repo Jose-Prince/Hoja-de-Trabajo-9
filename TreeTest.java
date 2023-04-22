@@ -1,3 +1,9 @@
+/**
+ * @author José Prince
+ * @date 21/04/2023
+ * Algoritmos y Estructura de Datos
+ * Pruebas unitarias de las implementaciones de los árboles utilizados
+ */
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

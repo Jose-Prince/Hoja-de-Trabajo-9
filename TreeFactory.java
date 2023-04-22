@@ -1,5 +1,17 @@
+/**
+ * @author José Prince
+ * @date 21/04/2023
+ * Algoritmos y Estructura de Datos
+ * Clase faxtory para los arboles
+ */
 public class TreeFactory {
     
+    
+    /** 
+     * @param num
+     * @return iTree
+     * Función que crea la instancia del árbol
+     */
     public iTree getInstance(int num){
         iTree ArbolUsado = null;
 
@@ -19,5 +31,4 @@ public class TreeFactory {
 
         return ArbolUsado;
     }
-    
 }

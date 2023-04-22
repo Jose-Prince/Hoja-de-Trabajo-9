@@ -1,5 +1,12 @@
+/**
+ * @author José Prince
+ * @date 21/04/2023
+ * Algoritmos y Estructura de Datos
+ * Implementación de Splay Tree
+ */
 public class SplayTree implements iTree {
 
+    //Clase de los nodos del árbol
     class SplayNode{
         SplayNode left, right, parent;
         String element;

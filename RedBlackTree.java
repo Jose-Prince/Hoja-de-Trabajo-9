@@ -1,3 +1,10 @@
+/**
+ * @author José Prince
+ * @date 21/04/2023
+ * Algoritmos y Estructura de Datos
+ * Implementación de Red Black Tree
+ */
+
 /* Class Node */
 class Node {
     String data;
