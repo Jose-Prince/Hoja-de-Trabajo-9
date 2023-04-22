@@ -47,10 +47,19 @@ public class SplayTree implements iTree {
             if (ele.compareTo(p.element) > 0)
                 z = z.right;
             else 
+                z = z.left;
+            }
+            z = new SplayNode();
+            z.element = ele;
+            z.parent = p;
+            if (p == null)
+                root = z;
+            else if (ele.compareTo(p.element) > 0)
+                p.right = z;
+            else 
                 p.left = z;
             Splay(z);
             countN++;
-        }
     }
 
     public void makeLeftChildParent(SplayNode c, SplayNode p){

@@ -50,21 +50,23 @@ public class AVLTree implements iTree{
             t = new AVLNode(x);
         else if (x.compareTo(t.data) < 0){
             t.left = insert(x, t.left);
-            if (x.compareTo(t.left.data) < 0)
-                t = rotateWithLeftChild(t);
-            else 
-                t = doubleWithLeftChild(t);
-        } else if (x.compareTo(t.data) > 0) {
-            t.right = insert(x, t.right);
-            if (height(t.right) - height(t.left) == 2) 
-                if(x.compareTo(t.right.data) > 0)
-                    t = rotateWithRightChild(t);
+            if (height(t.left) - height(t.right) == 2)
+                if (x.compareTo(t.left.data) < 0)
+                    t = rotateWithLeftChild(t);
                 else 
+                    t = doubleWithLeftChild(t);
+        } else if(x.compareTo(t.data) > 0){
+            t.right = insert(x,t.right);
+            if (height(t.right) - height(t.left) == 2)
+                if (x.compareTo(t.right.data) > 0)
+                    t = rotateWithRightChild(t);
+                else    
                     t = doubleWithRightChild(t);
-        } else 
+        } else
             ;
-        t.height = max(height(t.left), height(t.right)) + 1;
+        t.height = max(height(t.left), height(t.right)) + 1; 
         return t;
+
     }
 
     private AVLNode rotateWithLeftChild(AVLNode k2) {
@@ -139,9 +141,10 @@ public class AVLTree implements iTree{
         boolean found = false;
         while ((r != null) && !found){
             String rval = r.data;
-            if (val.compareTo(rval) < 0)
+            String[] palabras = rval.split(",");
+            if (val.compareTo(palabras[0]) < 0)
                 r = r.left;
-            else if (val.compareTo(rval) > 0)
+            else if (val.compareTo(palabras[0]) > 0)
                 r = r.right;
             else {
                 found = true;

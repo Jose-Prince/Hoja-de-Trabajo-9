@@ -9,7 +9,7 @@ public class TreeFactory {
                 break;
         
             case 2:
-                ArbolUsado = new RedBlackTree("");
+                ArbolUsado = new RedBlackTree();
                 break;
 
             case 3:

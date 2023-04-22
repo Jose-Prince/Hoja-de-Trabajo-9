@@ -14,7 +14,7 @@ public class DiccionarioMain {
             teclado.nextLine();
             iTree treeIngles = factory.getInstance(rpa);
             
-            File vocabulario = new File("Spanish");
+            File vocabulario = new File("Spanish.txt");
             Scanner lector = new Scanner(vocabulario);
     
             while(lector.hasNextLine()) {
@@ -23,7 +23,7 @@ public class DiccionarioMain {
             }
             lector.close();
 
-            File oraciones = new File("texto");
+            File oraciones = new File("texto.txt");
             lector = new Scanner(oraciones);
 
             while (lector.hasNextLine()){
@@ -31,7 +31,7 @@ public class DiccionarioMain {
                 System.out.println("Oración original: " + sentence);
                 String[] palabras = sentence.split(" ");
                 for (String palabra : palabras) {
-                    traduccion = traduccion + treeIngles.get(palabra);
+                    traduccion = traduccion + treeIngles.get(palabra) + " ";
                 }
                 System.out.println("Oración traducida: " + traduccion);
             }

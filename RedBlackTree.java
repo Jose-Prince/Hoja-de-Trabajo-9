@@ -1,156 +1,370 @@
-public class RedBlackTree implements iTree {
-    class RedBlackNode {
-        RedBlackNode left, right;
-        String element;
-        int color;
+/* Class Node */
+class Node {
+    String data;
+    Node parent;
+    Node left;
+    Node right;
+    int color;
+  }
+  
+ 
+ /* Class RBTree */
+ public class RedBlackTree implements iTree{
+    private Node root;
+  private Node TNULL;
 
-        public RedBlackNode(String theElement){
-            this(theElement, null, null);
+  // Balance the tree after deletion of a node
+  private void fixDelete(Node x) {
+    Node s;
+    while (x != root && x.color == 0) {
+      if (x == x.parent.left) {
+        s = x.parent.right;
+        if (s.color == 1) {
+          s.color = 0;
+          x.parent.color = 1;
+          leftRotate(x.parent);
+          s = x.parent.right;
         }
 
-        public RedBlackNode(String theElement, RedBlackNode lt, RedBlackNode rt) {
-            left = lt;
-            right = rt;
-            element = theElement;
-            color = 1;
+        if (s.left.color == 0 && s.right.color == 0) {
+          s.color = 1;
+          x = x.parent;
+        } else {
+          if (s.right.color == 0) {
+            s.left.color = 0;
+            s.color = 1;
+            rightRotate(s);
+            s = x.parent.right;
+          }
+
+          s.color = x.parent.color;
+          x.parent.color = 0;
+          s.right.color = 0;
+          leftRotate(x.parent);
+          x = root;
         }
-    }
-
-    private RedBlackNode current;
-    private RedBlackNode parent;
-    private RedBlackNode grand;
-    private RedBlackNode great;
-    private RedBlackNode header;
-    private static RedBlackNode nullNode;
-
-    static final int BLACK = 1;
-    static final int RED = 0;
-
-    public RedBlackTree(String negInf) {
-        header = new RedBlackNode(negInf);
-        header.left = nullNode;
-        header.right = nullNode;
-    }
-
-    public boolean isEmpty() {
-        return header.right == nullNode;
-    }
-
-    public void clear() {
-        header.right = nullNode;
-    }
-
-    public void insert(String item) {
-        current = parent = grand = header;
-        nullNode.element = item;
-        while (current.element != item) {
-            great = grand;
-            grand = parent;
-            parent = current;
-            current = item.compareTo(current.element) < 0 ? current.left : current.right;
-
-            if (current.left.color == RED && current.right.color == RED)
-                handleReorient(item);
+      } else {
+        s = x.parent.left;
+        if (s.color == 1) {
+          s.color = 0;
+          x.parent.color = 1;
+          rightRotate(x.parent);
+          s = x.parent.left;
         }
 
-        if (item.compareTo(parent.element) < 0)
-            parent.left = current;
-        else 
-            parent.right = current;
-        handleReorient(item);
-    }
+        if (s.right.color == 0 && s.right.color == 0) {
+          s.color = 1;
+          x = x.parent;
+        } else {
+          if (s.left.color == 0) {
+            s.right.color = 0;
+            s.color = 1;
+            leftRotate(s);
+            s = x.parent.left;
+          }
 
-    private void handleReorient(String item) {
-        current.color = RED;
-        current.left.color = BLACK;
-        current.right.color = BLACK;
-
-        if (parent.color == RED) {
-            grand.color = RED;
-            if (item.compareTo(grand.element) < 0 != item.compareTo(parent.element) < 0)
-                parent = rotate(item, grand);
-            current = rotate(item, great);
-            current.color = BLACK;
+          s.color = x.parent.color;
+          x.parent.color = 0;
+          s.left.color = 0;
+          rightRotate(x.parent);
+          x = root;
         }
+      }
+    }
+    x.color = 0;
+  }
+
+  private void rbTransplant(Node u, Node v) {
+    if (u.parent == null) {
+      root = v;
+    } else if (u == u.parent.left) {
+      u.parent.left = v;
+    } else {
+      u.parent.right = v;
+    }
+    v.parent = u.parent;
+  }
+
+  private void deleteNodeHelper(Node node, String key) {
+    Node z = TNULL;
+    Node x, y;
+    while (node != TNULL) {
+      if (node.data.compareTo(key) == 0) {
+        z = node;
+      }
+
+      if (node.data.compareTo(key) <= 0) {
+        node = node.right;
+      } else {
+        node = node.left;
+      }
     }
 
-    private RedBlackNode rotate(String item, RedBlackNode parent){
-        if(item.compareTo(parent.element) < 0)
-            return parent.left = item.compareTo(parent.left.element) < 0 ? rotateWithLeftChild(parent.left) : rotateWithRightChild(parent.left);
-        else
-            return parent.right = item.compareTo(parent.right.element) < 0 ? rotateWithLeftChild(parent.right) : rotateWithRightChild(parent.right);
+    if (z == TNULL) {
+      System.out.println("Couldn't find key in the tree");
+      return;
     }
 
-    private RedBlackNode rotateWithLeftChild(RedBlackNode k2){
-        RedBlackNode k1 = k2.left;
-        k2.left = k1.right;
-        k1.right = k2;
-        return k1;
+    y = z;
+    int yOriginalColor = y.color;
+    if (z.left == TNULL) {
+      x = z.right;
+      rbTransplant(z, z.right);
+    } else if (z.right == TNULL) {
+      x = z.left;
+      rbTransplant(z, z.left);
+    } else {
+      y = minimum(z.right);
+      yOriginalColor = y.color;
+      x = y.right;
+      if (y.parent == z) {
+        x.parent = y;
+      } else {
+        rbTransplant(y, y.right);
+        y.right = z.right;
+        y.right.parent = y;
+      }
+
+      rbTransplant(z, y);
+      y.left = z.left;
+      y.left.parent = y;
+      y.color = z.color;
+    }
+    if (yOriginalColor == 0) {
+      fixDelete(x);
+    }
+  }
+
+  // Balance the node after insertion
+  private void fixInsert(Node k) {
+    Node u;
+    while (k.parent.color == 1) {
+      if (k.parent == k.parent.parent.right) {
+        u = k.parent.parent.left;
+        if (u.color == 1) {
+          u.color = 0;
+          k.parent.color = 0;
+          k.parent.parent.color = 1;
+          k = k.parent.parent;
+        } else {
+          if (k == k.parent.left) {
+            k = k.parent;
+            rightRotate(k);
+          }
+          k.parent.color = 0;
+          k.parent.parent.color = 1;
+          leftRotate(k.parent.parent);
+        }
+      } else {
+        u = k.parent.parent.right;
+
+        if (u.color == 1) {
+          u.color = 0;
+          k.parent.color = 0;
+          k.parent.parent.color = 1;
+          k = k.parent.parent;
+        } else {
+          if (k == k.parent.right) {
+            k = k.parent;
+            leftRotate(k);
+          }
+          k.parent.color = 0;
+          k.parent.parent.color = 1;
+          rightRotate(k.parent.parent);
+        }
+      }
+      if (k == root) {
+        break;
+      }
+    }
+    root.color = 0;
+  }
+
+  public RedBlackTree() {
+    TNULL = new Node();
+    TNULL.color = 0;
+    TNULL.left = null;
+    TNULL.right = null;
+    root = TNULL;
+  }
+
+  public boolean search(String val)
+     {
+         return search(root, val);
+     }
+
+     private boolean search(Node r, String val)
+     {
+         boolean found = false;
+         while ((r != TNULL) && !found)
+         {
+             String rval = r.data;
+             if (val.compareTo(rval) < 0)
+                 r = r.left;
+             else if (val.compareTo(rval) > 0)
+                 r = r.right;
+             else
+             {
+                 found = true;
+                 break;
+             }
+             found = search(r, val);
+         }
+         return found;
+     }
+
+  public Node minimum(Node node) {
+    while (node.left != TNULL) {
+      node = node.left;
+    }
+    return node;
+  }
+
+  public Node maximum(Node node) {
+    while (node.right != TNULL) {
+      node = node.right;
+    }
+    return node;
+  }
+
+  public Node successor(Node x) {
+    if (x.right != TNULL) {
+      return minimum(x.right);
     }
 
-    private RedBlackNode rotateWithRightChild(RedBlackNode k1){ 
-        RedBlackNode k2 = k1.left;
-        k1.right = k2.left;
-        k2.left = k1;
-        return k2; 
+    Node y = x.parent;
+    while (y != TNULL && x == y.right) {
+      x = y;
+      y = y.parent;
+    }
+    return y;
+  }
+
+  public Node predecessor(Node x) {
+    if (x.left != TNULL) {
+      return maximum(x.left);
     }
 
-    public int count(RedBlackNode r){
-        if (r == nullNode)
-            return 0;
+    Node y = x.parent;
+    while (y != TNULL && x == y.left) {
+      x = y;
+      y = y.parent;
+    }
+
+    return y;
+  }
+
+  public void leftRotate(Node x) {
+    Node y = x.right;
+    x.right = y.left;
+    if (y.left != TNULL) {
+      y.left.parent = x;
+    }
+    y.parent = x.parent;
+    if (x.parent == null) {
+      this.root = y;
+    } else if (x == x.parent.left) {
+      x.parent.left = y;
+    } else {
+      x.parent.right = y;
+    }
+    y.left = x;
+    x.parent = y;
+  }
+
+  public void rightRotate(Node x) {
+    Node y = x.left;
+    x.left = y.right;
+    if (y.right != TNULL) {
+      y.right.parent = x;
+    }
+    y.parent = x.parent;
+    if (x.parent == null) {
+      this.root = y;
+    } else if (x == x.parent.right) {
+      x.parent.right = y;
+    } else {
+      x.parent.left = y;
+    }
+    y.right = x;
+    x.parent = y;
+  }
+
+  public void insert(String key) {
+    Node node = new Node();
+    node.parent = null;
+    node.data = key;
+    node.left = TNULL;
+    node.right = TNULL;
+    node.color = 1;
+
+    Node y = null;
+    Node x = this.root;
+
+    while (x != TNULL) {
+      y = x;
+      if (node.data.compareTo(x.data) < 0) {
+        x = x.left;
+      } else {
+        x = x.right;
+      }
+    }
+
+    node.parent = y;
+    if (y == null) {
+      root = node;
+    } else if (node.data.compareTo(y.data) < 0) {
+      y.left = node;
+    } else {
+      y.right = node;
+    }
+
+    if (node.parent == null) {
+      node.color = 0;
+      return;
+    }
+
+    if (node.parent.parent == null) {
+      return;
+    }
+
+    fixInsert(node);
+  }
+
+  public Node getRoot() {
+    return this.root;
+  }
+
+  public void deleteNode(String data) {
+    deleteNodeHelper(this.root, data);
+  }
+
+  public String get(String val) {
+    return get(root, val);
+  }
+
+  private String get(Node r, String val){
+    boolean found = false;
+    while ((r != TNULL) && !found){
+        String rval = r.data;
+        String[] palabras = rval.split(",");
+        if (val.compareTo(palabras[0]) < 0)
+            r = r.left;
+        else if (val.compareTo(palabras[0]) > 0)
+            r = r.right;
         else {
-            int l = 1;
-            l += count(r.left);
-            l += count(r.right);
-            return l;
+            found = true;
+            break;
         }
+        found = search(r, val);
+    }
+    if (found != false){
+        String[] palabras = r.data.split(",");
+        return palabras[1];
     }
 
-    public boolean search(String val){
-        return search(header.right, val);
-    }
+    else 
+        return "*"+val+"*";
+  }
 
-    private boolean search(RedBlackNode r, String val){
-        boolean found = false;
-        while ((r != nullNode) && !found){
-            String rval = r.element;
-            if (val.compareTo(rval) < 0)
-                r = r.left;
-            else if (val.compareTo(rval) > 0)
-                r = r.right;
-            else {
-                found = true;
-                break;
-            }
-            found = search(r, val);
-        }
-        return found;
-    }
-
-    public String get(String val){
-        return get(header.right, val);
-    }
-
-    private String get(RedBlackNode r, String val){
-        boolean found = false;
-        while ((r != nullNode) && !found){
-            String rval = r.element;
-            if (val.compareTo(rval) < 0)
-                r = r.left;
-            else if (val.compareTo(rval) > 0)
-                r = r.right;
-            else {
-                found = true;
-                break;
-            }
-            found = search(r, val);
-        }
-        if (found != false){
-            String[] palabras = r.element.split(",");
-            return palabras[1];
-        }
-
-        else 
-            return "*"+val+"*";
-    }
 }
