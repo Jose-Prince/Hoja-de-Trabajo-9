@@ -4,3 +4,17 @@ homework,tarea
 woman,mujer
 town,pueblo
 yes,si
+my,mi
+cat,gato
+person,persona
+school,escuela
+exam,examen
+good,bueno
+malo,bad
+incredible,incredible
+teacher,profesor
+mother,mamá
+father,papá
+friend,amigo
+pet,mascota
+circle,círculo
